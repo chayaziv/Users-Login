@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Modal } from "@mui/material";
+import { Box, Button, FormControl, Modal, TextField } from "@mui/material";
 import { useContext, useRef, useState } from "react";
 import { UserContext } from "../reducer/userReducer";
 const Login = () => {
@@ -37,11 +37,23 @@ const Login = () => {
       >
         <Box sx={style}>
           <FormControl defaultValue="" required>
-            <label htmlFor="name">name</label>
-            <input id="name" type="text" ref={nameRef} />
+            <TextField
+              label="Name"
+              variant="outlined"
+              type="email"
+              ref={nameRef}
+              fullWidth
+              margin="normal"
+            />
 
-            <label htmlFor="password">Password</label>
-            <input id="password" type="password" ref={passwordRef} />
+            <TextField
+              label="Password"
+              variant="outlined"
+              type="password"
+              ref={passwordRef}
+              fullWidth
+              margin="normal"
+            />
 
             <Button
               onClick={() => {
@@ -51,7 +63,7 @@ const Login = () => {
                   data: {
                     name: nameRef.current?.value || "",
                     password: passwordRef.current?.value || "",
-                    isLogin: true,             
+                    isLogin: true,
                   },
                 });
               }}

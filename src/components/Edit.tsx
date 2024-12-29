@@ -1,8 +1,7 @@
-import { Box, Button, FormControl, Modal } from "@mui/material";
-import { useContext,  useState } from "react";
+import { Box, Button, FormControl, Modal, TextField } from "@mui/material";
+import { useContext, useState } from "react";
 import { UserContext } from "../reducer/userReducer";
 const Edit = () => {
-
   const style = {
     position: "absolute",
     top: "50%",
@@ -41,45 +40,55 @@ const Edit = () => {
         >
           <Box sx={style}>
             <FormControl defaultValue="" required>
-                <label htmlFor="name">Name</label>
-                <input
-                id="name"
-                type="text"
+             
+              <TextField
+                label="Name"
+                variant="outlined"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                />
+                fullWidth
+                margin="normal"
+              />
 
-                <label htmlFor="email">Email</label>
-                <input
-                id="email"
+              <TextField
+                label="Email"
+                variant="outlined"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                />
+                fullWidth
+                margin="normal"
+              />
 
-                <label htmlFor="password">Password</label>
-                <input
-                id="password"
+              <TextField
+                label="Password"
+                variant="outlined"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                />
+                fullWidth
+                margin="normal"
+              />
 
-                <label htmlFor="address">Address</label>
-                <input
-                id="address"
+              <TextField
+                label="Address"
+                variant="outlined"
                 type="text"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                />
+                fullWidth
+                margin="normal"
+              />
 
-                <label htmlFor="phone">Phone</label>
-                <input
-                id="phone"
+              <TextField
+                label="Phone"
+                variant="outlined"
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                />
+                fullWidth
+                margin="normal"
+              />
 
               <Button
                 onClick={() => {
@@ -97,6 +106,7 @@ const Edit = () => {
                   });
                 }}
                 variant="contained"
+                
               >
                 save
               </Button>
