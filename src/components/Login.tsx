@@ -4,7 +4,6 @@ import { UserContext } from "../reducer/userReducer";
 const Login = () => {
   const nameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-
   const style = {
     position: "absolute",
     top: "50%",
@@ -36,12 +35,11 @@ const Login = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <FormControl defaultValue="" required>
+          <FormControl defaultValue="">
             <TextField
               label="Name"
               variant="outlined"
-              type="email"
-              ref={nameRef}
+              inputRef={nameRef}
               fullWidth
               margin="normal"
             />
@@ -49,8 +47,7 @@ const Login = () => {
             <TextField
               label="Password"
               variant="outlined"
-              type="password"
-              ref={passwordRef}
+              inputRef={passwordRef}
               fullWidth
               margin="normal"
             />
