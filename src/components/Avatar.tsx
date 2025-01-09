@@ -10,7 +10,7 @@ import {
 
 const AvatarComponent = () => {
   const { auth, userDispatch } = useContext(AuthContext);
-  const firstletter = auth.user.firstName.charAt(0).toUpperCase();
+  const firstletter = auth.user.firstName?.charAt(0).toUpperCase();
   console.log(auth.user);
   const stringToColor = (string: string) => {
     let hash = 0;

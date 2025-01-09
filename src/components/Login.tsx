@@ -3,9 +3,9 @@ import axios, { AxiosError } from "axios";
 import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../reducer/userReducer";
 const Login = () => {
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const [userID, setUserId] = useState<number>();
+
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [status, setStatus] = useState<statusType>({
     signIn: false,
     signUp: false,
@@ -41,10 +41,19 @@ const Login = () => {
   const signUp = async () => {
     try {
       const res = await axios.post("http://localhost:3000/api/user/register", {
-        email: emailRef.current?.value,
-        password: passwordRef.current?.value,
+        email: email,
+        password: password,
       });
-      setUserId(res.data.userId);
+     console.log("ref:",email , password);
+     
+      userDispatch({
+        type: "ADD_USER",
+        user: {
+          id: res.data.userId,
+          email: email,
+          password: password,
+        },
+      });
     } catch (e: AxiosError | any) {
       console.log(e);
       if (e.response?.status === 422) alert(e.response.data.message);
@@ -56,10 +65,17 @@ const Login = () => {
   const signIn = async () => {
     try {
       const res = await axios.post("http://localhost:3000/api/user/login", {
-        email: emailRef.current?.value,
-        password: passwordRef.current?.value,
+        email: email,
+        password: password,
       });
-     
+
+
+      userDispatch({
+        type: "SET_USER",
+        user: res.data.user,
+      });
+
+
     } catch (e: AxiosError | any) {
       console.log(e);
       if (e.response?.status === 401) alert(e.response.data.message);
@@ -68,9 +84,10 @@ const Login = () => {
       }
     }
   };
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    console.log("-----------------");
     try {
+      console.log(status);
       if (status.signIn) {
         await signIn();
       } else if (status.signUp) {
@@ -94,7 +111,7 @@ const Login = () => {
       <Button
         color="inherit"
         onClick={() => {
-          handleOpen;
+          handleOpen();
           setStatus({ signIn: false, signUp: true });
         }}
       >
@@ -108,11 +125,11 @@ const Login = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <FormControl onSubmit={handleSubmit} defaultValue="">
+          <FormControl  defaultValue="">
             <TextField
               label="Email"
               variant="outlined"
-              inputRef={emailRef}
+             onChange={(e) => setEmail(e.target.value)}
               fullWidth
               margin="normal"
             />
@@ -120,22 +137,16 @@ const Login = () => {
             <TextField
               label="Password"
               variant="outlined"
-              inputRef={passwordRef}
+              onChange={(e) => setPassword(e.target.value)}
               fullWidth
               margin="normal"
             />
 
             <Button
-              type="submit"
               onClick={() => {
+                
+                handleSubmit();
                 handleClose();
-                userDispatch({
-                  type: "ADD_USER",
-                  user: {
-                    email: emailRef.current?.value || "",
-                    password: passwordRef.current?.value || "",
-                  },
-                });
               }}
               variant="contained"
             >
