@@ -57,10 +57,8 @@ let identity = 1;
 export default (state: AuthUser, action: Action): AuthUser => {
   switch (action.type) {
     case "ADD_USER":
-      const currentUser =
-        action.user.firstName !== state.user.firstName || action.user.lastName !== state.user.lastName ? emptyUser : state.user;
       return {
-        user: { ...currentUser, ...action.user, id: identity++ },
+        user: { ...emptyUser, ...action.user, id: identity++ },
         isLogin: true,
       };
     case "DELETE_USER":

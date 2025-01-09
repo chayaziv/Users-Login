@@ -1,9 +1,21 @@
 import { Box, Button, FormControl, Modal, TextField } from "@mui/material";
+import axios, { AxiosError } from "axios";
 import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../reducer/userReducer";
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const [userID, setUserId] = useState<number>();
+  const [status, setStatus] = useState<statusType>({
+    signIn: false,
+    signUp: false,
+  });
+
+  type statusType = {
+    signIn: boolean;
+    signUp: boolean;
+  };
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -26,10 +38,67 @@ const Login = () => {
     return <></>;
   }
 
+  const signUp = async () => {
+    try {
+      const res = await axios.post("http://localhost:3000/api/user/register", {
+        email: emailRef.current?.value,
+        password: passwordRef.current?.value,
+      });
+      setUserId(res.data.userId);
+    } catch (e: AxiosError | any) {
+      console.log(e);
+      if (e.response?.status === 422) alert(e.response.data.message);
+      else if (!e.response.ok) {
+        throw new Error(e.response.status + "" + e.response.data.message);
+      }
+    }
+  };
+  const signIn = async () => {
+    try {
+      const res = await axios.post("http://localhost:3000/api/user/login", {
+        email: emailRef.current?.value,
+        password: passwordRef.current?.value,
+      });
+     
+    } catch (e: AxiosError | any) {
+      console.log(e);
+      if (e.response?.status === 401) alert(e.response.data.message);
+      else if (!e.response.ok) {
+        throw new Error(e.response.status + "" + e.response.data.message);
+      }
+    }
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (status.signIn) {
+        await signIn();
+      } else if (status.signUp) {
+        await signUp();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <>
-      <Button color="inherit" onClick={handleOpen}>
-        Login
+      <Button
+        color="inherit"
+        onClick={() => {
+          handleOpen();
+          setStatus({ signIn: true, signUp: false });
+        }}
+      >
+        sign in
+      </Button>
+      <Button
+        color="inherit"
+        onClick={() => {
+          handleOpen;
+          setStatus({ signIn: false, signUp: true });
+        }}
+      >
+        sign up
       </Button>
 
       <Modal
@@ -39,7 +108,7 @@ const Login = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <FormControl defaultValue="">
+          <FormControl onSubmit={handleSubmit} defaultValue="">
             <TextField
               label="Email"
               variant="outlined"
@@ -57,6 +126,7 @@ const Login = () => {
             />
 
             <Button
+              type="submit"
               onClick={() => {
                 handleClose();
                 userDispatch({
