@@ -2,60 +2,71 @@ import { createContext, Dispatch } from "react";
 
 export type UserType = {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   address: string;
   phone: string;
-  isLogin?: boolean;
 };
 
 type Action =
   | {
       type: "ADD_USER";
-      data: Omit<UserType, "id" | "email" | "address" | "phone">;
+      user: Omit<UserType, "id" | "firstName"|"lastName" | "address" | "phone">;
     }
   | {
       type: "UPDATE_USER";
-      data: Partial<UserType> & { id: number };
+      user: Partial<UserType> & { id: number };
     }
   | {
       type: "DELETE_USER";
       id: number;
     };
 
-export const emptyUser: UserType = {
+const emptyUser: UserType = {
   id: 0,
-  name: "",
+  firstName: "",
+  lastName: "",
   email: "",
   password: "",
   address: "",
   phone: "",
-  isLogin: false,
 };
 
-export const UserContext = createContext<{
+export type AuthUser = {
   user: UserType;
+  isLogin: boolean;
+};
+
+export const initialState:AuthUser={
+  user: emptyUser,
+  isLogin: false
+}
+
+export const AuthContext = createContext<{
+  auth: AuthUser;
   userDispatch: Dispatch<Action>;
 }>({
-  user: emptyUser,
+  auth: initialState,
   userDispatch: () => null,
 });
 
 let identity = 1;
 
-export default (state: UserType, action: Action): UserType => {
+export default (state: AuthUser, action: Action): AuthUser => {
   switch (action.type) {
     case "ADD_USER":
-      if (action.data.name != state.name) {
-        return { ...emptyUser, ...action.data, id: identity++ };
-      } else {
-        return { ...state, ...action.data, id: identity++ };
-      }
+      const currentUser =
+        action.user.firstName !== state.user.firstName || action.user.lastName !== state.user.lastName ? emptyUser : state.user;
+      return {
+        user: { ...currentUser, ...action.user, id: identity++ },
+        isLogin: true,
+      };
     case "DELETE_USER":
       return { ...state, isLogin: false };
     case "UPDATE_USER":
-      return { ...state, ...action.data };
+      return { ...state, user: { ...state.user, ...action.user } };
     default:
       return state;
   }

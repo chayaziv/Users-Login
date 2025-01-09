@@ -1,8 +1,8 @@
 import { Box, Button, FormControl, Modal, TextField } from "@mui/material";
 import { useContext, useRef, useState } from "react";
-import { UserContext } from "../reducer/userReducer";
+import { AuthContext } from "../reducer/userReducer";
 const Login = () => {
-  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const style = {
     position: "absolute",
@@ -20,7 +20,11 @@ const Login = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const { userDispatch } = useContext(UserContext);
+  const { auth, userDispatch } = useContext(AuthContext);
+
+  if (auth.isLogin) {
+    return <></>;
+  }
 
   return (
     <>
@@ -37,9 +41,9 @@ const Login = () => {
         <Box sx={style}>
           <FormControl defaultValue="">
             <TextField
-              label="Name"
+              label="Email"
               variant="outlined"
-              inputRef={nameRef}
+              inputRef={emailRef}
               fullWidth
               margin="normal"
             />
@@ -57,10 +61,9 @@ const Login = () => {
                 handleClose();
                 userDispatch({
                   type: "ADD_USER",
-                  data: {
-                    name: nameRef.current?.value || "",
+                  user: {
+                    email: emailRef.current?.value || "",
                     password: passwordRef.current?.value || "",
-                    isLogin: true,
                   },
                 });
               }}

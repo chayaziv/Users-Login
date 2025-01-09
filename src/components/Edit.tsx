@@ -1,6 +1,7 @@
 import { Box, Button, FormControl, Modal, TextField } from "@mui/material";
-import { useContext, useState } from "react";
-import { UserContext } from "../reducer/userReducer";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../reducer/userReducer";
+
 const Edit = () => {
   const style = {
     position: "absolute",
@@ -14,17 +15,20 @@ const Edit = () => {
     p: 4,
   };
 
-  const { user, userDispatch } = useContext(UserContext);
-
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
-  const [password, setPassword] = useState(user.password);
-  const [address, setAddress] = useState(user.address);
-  const [phone, setPhone] = useState(user.phone);
+  const { auth, userDispatch } = useContext(AuthContext);
+  const [user, setUser] = useState(auth.user);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  useEffect(() => {
+    setUser(auth.user);
+  }, [auth.user]);
+
+  if (!auth.isLogin) {
+    return <></>;
+  }
 
   return (
     <>
@@ -40,22 +44,29 @@ const Edit = () => {
         >
           <Box sx={style}>
             <FormControl defaultValue="" required>
-             
               <TextField
-                label="Name"
+                label="First Name"
                 variant="outlined"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={user.firstName}
+                onChange={(e) => setUser({...user, firstName:e.target.value})}
                 fullWidth
                 margin="normal"
               />
 
               <TextField
+                label="Last Name"
+                variant="outlined"
+                value={user.lastName}
+                onChange={(e) => setUser({...user, lastName:e.target.value})}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
                 label="Email"
                 variant="outlined"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={user.email}
+                onChange={(e) => setUser({...user, email:e.target.value})}
                 fullWidth
                 margin="normal"
               />
@@ -64,8 +75,8 @@ const Edit = () => {
                 label="Password"
                 variant="outlined"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={user.password}
+                onChange={(e) => setUser({...user, password:e.target.value})}
                 fullWidth
                 margin="normal"
               />
@@ -74,8 +85,8 @@ const Edit = () => {
                 label="Address"
                 variant="outlined"
                 type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                value={user.address}
+                onChange={(e) => setUser({...user, address:e.target.value})}
                 fullWidth
                 margin="normal"
               />
@@ -84,8 +95,8 @@ const Edit = () => {
                 label="Phone"
                 variant="outlined"
                 type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                value={user.phone}
+                onChange={(e) => setUser({...user, phone:e.target.value})}
                 fullWidth
                 margin="normal"
               />
@@ -95,18 +106,10 @@ const Edit = () => {
                   handleClose();
                   userDispatch({
                     type: "UPDATE_USER",
-                    data: {
-                      id: user.id,
-                      name: name,
-                      email: email,
-                      password: password,
-                      address: address,
-                      phone: phone,
-                    },
+                    user: user,
                   });
                 }}
                 variant="contained"
-                
               >
                 save
               </Button>

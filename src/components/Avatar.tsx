@@ -1,11 +1,17 @@
 import { useContext } from "react";
-import { UserContext } from "../reducer/userReducer";
-import { Button, Avatar as MuiAvatar, Typography } from "@mui/material";
+import { AuthContext } from "../reducer/userReducer";
+import {
+ 
+  Button,
+  Avatar as MuiAvatar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 
 const AvatarComponent = () => {
-  const { user, userDispatch } = useContext(UserContext);
-  const firstletter = user.name.charAt(0).toUpperCase();
-  console.log(user);
+  const { auth, userDispatch } = useContext(AuthContext);
+  const firstletter = auth.user.firstName.charAt(0).toUpperCase();
+  console.log(auth.user);
   const stringToColor = (string: string) => {
     let hash = 0;
     let i;
@@ -19,22 +25,32 @@ const AvatarComponent = () => {
     }
     return color;
   };
+
+  if (!auth.isLogin) {
+    return <></>;
+  }
+
   return (
     <>
-      <MuiAvatar sx={{ bgcolor: stringToColor(user.name + user.name), mr: 2 }}>
-        {firstletter}
-      </MuiAvatar>
+      <Tooltip title={auth.user.firstName} arrow>
+        <MuiAvatar
+          sx={{
+            bgcolor: stringToColor(auth.user.firstName + auth.user.lastName),
+            mr: 2,
+          }}
+        >
+          {firstletter}
+        </MuiAvatar>
+      </Tooltip>
 
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-        Hello {user.name}
-      </Typography>
+      <Typography sx={{ flexGrow: 1 }}>{auth.user.firstName}</Typography>
 
       <Button
         color="inherit"
         onClick={() =>
           userDispatch({
             type: "DELETE_USER",
-            id: user.id,
+            id: auth.user.id,
           })
         }
       >
