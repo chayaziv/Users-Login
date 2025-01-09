@@ -1,7 +1,6 @@
 import { useContext } from "react";
-import { AuthContext } from "../reducer/userReducer";
+import { AuthContext } from "../../reducer/userReducer";
 import {
- 
   Button,
   Avatar as MuiAvatar,
   Tooltip,
@@ -43,7 +42,7 @@ const AvatarComponent = () => {
         </MuiAvatar>
       </Tooltip>
 
-      <Typography sx={{ flexGrow: 1 }}>{auth.user.firstName}</Typography>
+      <Typography sx={{ flexGrow: 1,fontSize:"20px" }}>{auth.user.firstName}</Typography>
 
       <Button
         color="inherit"

@@ -1,23 +1,29 @@
 import { createTheme, ThemeProvider } from "@mui/material";
-import Header from "./components/Header";
+import { RouterProvider } from "react-router";
+import { router } from "./Router";
+import userReducer, { AuthContext, initialState } from "./reducer/userReducer";
+import { useReducer } from "react";
+
 const theme = createTheme({
   palette: {
     primary: {
-      main: "rgb(37, 169, 103)", 
+      main: "rgb(37, 169, 103)",
     },
     text: {
-      primary: "rgb(21, 80, 1)", 
+      primary: "rgb(21, 80, 1)",
       secondary: "rgb(21, 80, 1)",
-    }
+    },
   },
 });
 function App() {
+  const [auth, userDispatch] = useReducer(userReducer, initialState);
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <Header></Header>
-        <h1 style={{ fontSize: "200px", alignItems: "center" }}>HOME</h1>
-      </ThemeProvider>
+      <AuthContext.Provider value={{ auth, userDispatch }}>
+        <ThemeProvider theme={theme}>
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </AuthContext.Provider>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, Modal, TextField } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../reducer/userReducer";
+import { AuthContext } from "../../reducer/userReducer";
 import axios, { AxiosError } from "axios";
 
 const Edit = () => {

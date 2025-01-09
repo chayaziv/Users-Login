@@ -1,9 +1,8 @@
 import { Box, Button, FormControl, Modal, TextField } from "@mui/material";
 import axios, { AxiosError } from "axios";
 import { useContext, useRef, useState } from "react";
-import { AuthContext } from "../reducer/userReducer";
+import { AuthContext } from "../../reducer/userReducer";
 const Login = () => {
-
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [status, setStatus] = useState<statusType>({
@@ -44,8 +43,8 @@ const Login = () => {
         email: email,
         password: password,
       });
-     console.log("ref:",email , password);
-     
+      console.log("ref:", email, password);
+
       userDispatch({
         type: "ADD_USER",
         user: {
@@ -69,13 +68,10 @@ const Login = () => {
         password: password,
       });
 
-
       userDispatch({
         type: "SET_USER",
         user: res.data.user,
       });
-
-
     } catch (e: AxiosError | any) {
       console.log(e);
       if (e.response?.status === 401) alert(e.response.data.message);
@@ -125,11 +121,11 @@ const Login = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <FormControl  defaultValue="">
+          <FormControl defaultValue="">
             <TextField
               label="Email"
               variant="outlined"
-             onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               fullWidth
               margin="normal"
             />
@@ -144,7 +140,6 @@ const Login = () => {
 
             <Button
               onClick={() => {
-                
                 handleSubmit();
                 handleClose();
               }}
