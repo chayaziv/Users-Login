@@ -1,8 +1,7 @@
 import User from "./User";
 
 
-function Header() {
-
+const Header=()=> {
 
   return (
     <>
